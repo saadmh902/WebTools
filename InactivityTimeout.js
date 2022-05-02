@@ -60,7 +60,7 @@ function checkTimeout(){
   	//timeElapsed = getCurrentUnixTime() - getLastUnixTime()
   	//console.log(timeElapsed)
   	if((getCurrentUnixTime() - getLastUnixTime()) > timeout){//If there has been a difference of 900 seconds between current time and last activity then kill page
-  		..alert("Its been too long!");
+  		//alert("Its been too long!");
   		killPage();
   	}
   	if((getCurrentUnixTime() - getLastUnixTime()) > (timeout - 120)){
