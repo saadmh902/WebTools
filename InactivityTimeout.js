@@ -3,19 +3,29 @@
   Checks for mousemovement keypresses etc
 */
 function getCurrentUnixTime(){
-  var unix = Math.round((new Date()).getTime() / 1000);
-  return unix;
-  }
-  function getLastUnixTime(){
-  var lastUnix = 0;
-  lastUnix[1] = 0;
-  var cookie = document.cookie;
-  lastUnix = cookie.split("=");
-  return lastUnix[1];
+var ts = Math.round((new Date()).getTime() / 1000);
+//console.log(ts);
+return ts;
 }
+function getLastUnixTime(){
+var lastUnix = 0;
+var cookieSplit = "";
+lastUnix[1] = 0;
+lastUnix = document.cookie.split(";");
+	for(let i = 0; i < lastUnix.length; i++){
+		cookieSplit = lastUnix[i];
+		info = cookieSplit.split("=");
+		if(info[0].replace(" ","") == "currentUnixTime"){
+			return info[1];
+		}
+	}
+}
+
+/* Set listeners for timeout */
 
 function setTimeoutListeners(){
 
+	element = $('html');
 	element = document.getElementsByTagName("html")[0];
 	element.addEventListener("mouseover", setNewUnixTime);
 	element.addEventListener("click", setNewUnixTime);
@@ -32,29 +42,35 @@ function setTimeoutListeners(){
 function setNewUnixTime(){
 	var time = getCurrentUnixTime();
 	document.cookie = "currentUnixTime" + "=" + time + "; path=/";
+	//console.log("Set new unix time to:" + time);
+
 }
 function killPage(){
-	window.location="timeout.php";
+	$('html').html("Inactive.");
+	window.location="/OrderOrganizer/timeout.php";
 }
 function warnPage(){
-	//Do some stuff to warn the user that they will be logged off
+	console.log("Warning, you will be logged out soon if you continue being inactive.");
 }
 function checkTimeout(){
 	var intervalId = window.setInterval(function(){
   	
   	var timeout = 900;
 
-  	if((getCurrentUnixTime() - getLastUnixTime()) > timeout){
+  	//timeElapsed = getCurrentUnixTime() - getLastUnixTime()
+  	//console.log(timeElapsed)
+  	if((getCurrentUnixTime() - getLastUnixTime()) > timeout){//If there has been a difference of 900 seconds between current time and last activity then kill page
+  		..alert("Its been too long!");
   		killPage();
   	}
   	if((getCurrentUnixTime() - getLastUnixTime()) > (timeout - 120)){
 
-  		warnPage();
+  		//warnPage();
   	}
 
 	}, 5000); //Check the time every 5 seconds
 }
 
-
+//Check if session is timed out BEFORE setting timeout listeners, this will allow timeouts if the browser is closed and reopened.
 checkTimeout();
 setTimeoutListeners();
