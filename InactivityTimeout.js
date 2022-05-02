@@ -47,7 +47,7 @@ function setNewUnixTime(){
 }
 function killPage(){
 	$('html').html("Inactive.");
-	window.location="/OrderOrganizer/timeout.php";
+	window.location="/timeout.php";
 }
 function warnPage(){
 	console.log("Warning, you will be logged out soon if you continue being inactive.");
